@@ -1,0 +1,27 @@
+{
+  "name": "skip-connection-1d",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "tensorspace": "^0.2.0",
+    "@tensorflow/tfjs": "^0.14.0",
+    "@tweenjs/tween.js": "^17.2.0",
+    "install": "^0.12.1",
+    "npm": "^6.4.1",
+    "three": "^0.98.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syt123450/skip-connection-1d.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/syt123450/skip-connection-1d/issues"
+  },
+  "homepage": "https://github.com/syt123450/skip-connection-1d#readme"
+}

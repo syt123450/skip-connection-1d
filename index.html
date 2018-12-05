@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Skip Connection Demo</title>
+    <meta name="author" content="syt123450 / https://github.com/syt123450">
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script src="./lib/jquery.min.js"></script>
+<script src="./lib/three.min.js"></script>
+<script src="./lib/tween.min.js"></script>
+<script src="./lib/TrackballControls.js"></script>
+<script src="./lib/tf.min.js"></script>
+<script src="./lib/tensorspace.min.js"></script>
+
+<script>
+
+	let input_1 = new TSP.layers.Input1d( {
+
+		shape: [ 10 ],
+		name: "input_1"
+
+	} );
+
+	let dense_1 = new TSP.layers.Dense( {
+
+		units: 80,
+		name: "dense_1"
+
+	} );
+
+	dense_1.apply( input_1 );
+
+	let dense_2 = new TSP.layers.Dense( {
+
+		units: 5,
+		name: "dense_2"
+
+	} );
+
+	dense_2.apply( dense_1 );
+
+	let dense_3 = new TSP.layers.Dense( {
+
+		units: 10,
+		name: "dense_3"
+
+	} );
+
+	dense_3.apply( input_1 );
+
+	let dense = new TSP.layers.Dense( {
+
+		units: 20,
+		name: "dense"
+
+	} );
+
+	dense.apply( input_1 );
+
+	let concatenate = TSP.layers.Concatenate( [ dense_2, dense_3, dense ], {
+
+		name: "concatenate"
+
+	} );
+
+	let dense_4 = new TSP.layers.Dense( {
+
+		units: 1,
+		name: "dense_4"
+
+	} );
+
+	dense_4.apply( concatenate );
+
+	let modelContainer = document.getElementById( "container" );
+
+	let model = new TSP.models.Model( modelContainer, {
+
+		inputs: [ input_1 ],
+		outputs: [ dense_4 ],
+		outputsOrder: [ "dense_1", "dense_2", "dense_3", "dense", "concatenate", "dense_4" ]
+
+	} );
+
+	model.load( {
+
+		type: "tfjs",
+		url: './model/model.json'
+
+	} );
+
+	model.init( function() {
+
+		model.predict( [ tf.randomNormal( [ 1, 10 ] ).dataSync() ] );
+
+	} );
+
+</script>
+</body>
+</html>

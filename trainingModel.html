@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Train and save model</title>
+    <meta name="author" content="syt123450 / https://github.com/syt123450">
+    <script src="./lib/tf.min.js"></script>
+
+</head>
+<body>
+
+<script>
+
+	let input_1 = tf.input( {
+
+		shape: [ 10 ],
+		name: "input_1"
+
+	} );
+
+	let dense_1 = tf.layers.dense( {
+
+		units: 80,
+		name: "dense_1"
+
+	} );
+
+	let dense_1Output = dense_1.apply( input_1 );
+
+	let dropout_1 = tf.layers.dropout( {
+
+        rate: 0.7,
+        name: "dropout_1"
+
+    } );
+
+	let dropout_1Output = dropout_1.apply( dense_1Output );
+
+	const dense_2 = tf.layers.dense( {
+
+		units: 5,
+		name: "dense_2"
+
+	} );
+
+	let dense_2Output = dense_2.apply( dropout_1Output );
+
+	let dropout_2 = tf.layers.dropout( {
+
+		rate: 0.7,
+		name: "dropout_2"
+
+	} );
+
+	let dropout_2Output = dropout_2.apply( dense_2Output );
+
+    let dropout_3 = tf.layers.dropout( {
+
+		rate: 0.7,
+		name: "dropout_3"
+
+	} );
+
+    let dropout_3Output = dropout_3.apply( input_1 );
+
+	const dense_3 = tf.layers.dense( {
+
+		units: 10,
+		name: "dense_3"
+
+	} );
+
+	let dense_3Output = dense_3.apply( dropout_3Output );
+
+	let dropout_4 = tf.layers.dropout( {
+
+		rate: 0.7,
+		name: "dropout_4"
+
+	} );
+
+	let dropout_4Output = dropout_4.apply( dense_3Output );
+
+	const dense = tf.layers.dense( {
+
+		units: 20,
+		name: "dense"
+
+	} );
+
+	let denseOutput = dense.apply( input_1 );
+
+	let dropout = tf.layers.dropout( {
+
+		rate: 0.7,
+		name: "dropout"
+
+	} );
+
+	let dropoutOutput = dropout.apply( denseOutput );
+
+	let concatenate = tf.layers.concatenate( {
+
+        name: "concatenate"
+
+    } );
+
+	let concatenateOutput = concatenate.apply( [ dropout_2Output, dropout_4Output, dropoutOutput ] );
+
+	const dense_4 = tf.layers.dense( {
+
+		units: 1,
+		name: "dense_4"
+
+	} );
+
+	let dense_4Output = dense_4.apply( concatenateOutput );
+
+	let model = tf.model( {
+
+		inputs: input_1,
+		outputs: [ dense_1Output, dense_2Output, dense_3Output, denseOutput, concatenateOutput, dense_4Output ]
+
+	} );
+
+	model.save( "downloads://model" );
+
+</script>
+
+</body>
+</html>
